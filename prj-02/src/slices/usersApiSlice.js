@@ -14,6 +14,7 @@ const Services = `${process.env.REACT_APP_API}/services`
 const Utilities = `${process.env.REACT_APP_API}/utilities`
 const GST = `${process.env.REACT_APP_API}/gst`
 const PHONEPE = `${process.env.REACT_APP_API}/phonepe`
+const REPORTER = `${process.env.REACT_APP_API}/reporter`
 export const usersApiSlice = apiSlice.injectEndpoints({
     endpoints:(builder)=>({
         dashboard:builder.mutation({
@@ -341,8 +342,21 @@ export const usersApiSlice = apiSlice.injectEndpoints({
                 method:'POST',
                 body:data
             })
+        }),
+        getReporter:builder.mutation({
+            query:()=>({
+                url:`${REPORTER}/profile`,
+                method:'GET'
+            })
+        }),
+        createReporter:builder.mutation({
+            query:(data)=>({
+                url:`${REPORTER}/register`,
+                method:"POST",
+                body:data
+            })
         })
     })
 })
 
-export const{useDashboardMutation,useLoginMutation,useAccepTermsMutation,useLogoutMutation,useUpdateUserMutation,useGetUserQuery,useCreateUserMutation,useGetDistributorMutation,useCreateDistributorMutation,useGetDistributorDetailsMutation,useUpdateDistributorMarginMutation,useUpdateDistributorMutation,useActivateDistributorMutation,useGetRetailerMutation,useCreateRetailerMutation,useApproveDistributorMutation,useGetRetailerDetailsMutation,useUpdateRetailerMutation,useApproveRetailerMutation,useUpdateRetailerPercentageMutation,useActiveRetailerMutation,useCreateOrderMutation,useOrderStatusMutation,useCreateRazorOrderMutation,useOrderHistoryMutation,useRetailerMutation,useAadharMutation,useOtpMutation,usePanMutation,useContactMutation,useForgotPasswordMutation,useVerifyMutation,useResetPasswordMutation,useCategoryMutation,useBillerMutation,useBillerDetailsMutation,useBillerEnquiryMutation,useBillerPaymentMutation,useGstMutation,usePhonepeMutation,useGetSuperDistributorMutation,useCreateSuperDistributorMutation,useGetSuperDistributorDetailsMutation,useUpdateSuperDistributorMarginMutation,useUpdateSuperDistributorMutation,useActivateSuperDistributorMutation,useApproveSuperDistributorMutation} = usersApiSlice
+export const{useDashboardMutation,useLoginMutation,useAccepTermsMutation,useLogoutMutation,useUpdateUserMutation,useGetUserQuery,useCreateUserMutation,useGetDistributorMutation,useCreateDistributorMutation,useGetDistributorDetailsMutation,useUpdateDistributorMarginMutation,useUpdateDistributorMutation,useActivateDistributorMutation,useGetRetailerMutation,useCreateRetailerMutation,useApproveDistributorMutation,useGetRetailerDetailsMutation,useUpdateRetailerMutation,useApproveRetailerMutation,useUpdateRetailerPercentageMutation,useActiveRetailerMutation,useCreateOrderMutation,useOrderStatusMutation,useCreateRazorOrderMutation,useOrderHistoryMutation,useRetailerMutation,useAadharMutation,useOtpMutation,usePanMutation,useContactMutation,useForgotPasswordMutation,useVerifyMutation,useResetPasswordMutation,useCategoryMutation,useBillerMutation,useBillerDetailsMutation,useBillerEnquiryMutation,useBillerPaymentMutation,useGstMutation,usePhonepeMutation,useGetSuperDistributorMutation,useCreateSuperDistributorMutation,useGetSuperDistributorDetailsMutation,useUpdateSuperDistributorMarginMutation,useUpdateSuperDistributorMutation,useActivateSuperDistributorMutation,useApproveSuperDistributorMutation,useGetReporterMutation,useCreateReporterMutation} = usersApiSlice

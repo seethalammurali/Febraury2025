@@ -219,6 +219,25 @@
         "path": "/dashboard/tpin"
       }
     ]
+  },
+  {
+    "key": 15,
+    "icon": "AiOutlineUpload",
+    "label": "Reports",
+    "roles": [
+      "superadmin"],
+      "children":[{
+        "key": 2,
+        "icon": "AiOutlineTeam",
+        "label": "Reporter",
+        "path": "/dashboard/reporter"
+      },
+      {
+        "key": 14,
+        "icon": "FaUserPlus",
+        "label": "Add Distributor",
+        "path": "/dashboard/reporter/addreporter"
+      }]
   }
 
 ]
