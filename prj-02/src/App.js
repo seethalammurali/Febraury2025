@@ -62,7 +62,8 @@ import PasswordSetup from "./pages/PasswordSetup";
 import Utilities from "./pages/Utilities";
 import { ToastContainer } from "react-toastify";
 import PaymentPage from "./pages/PaymentPage";
-
+import  GetReporter from "./pages/Reporter/GetReporter";
+import  AddReporter from "./pages/Reporter/AddReporter";
 
 const RequireAuth = ({ children }) => {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
@@ -104,7 +105,7 @@ function App() {
           <Route path="addRetailer" element={<ProtectedRoute allowedRoles={["distributor"]}><AddRetailer /></ProtectedRoute>}/>
           <Route path="retailerMargin" element={<RetailerMargin />} />
         </Route>
-        <Route path="reports" element={<ProtectedRoute allowedRoles={['retailer','wholesaler']}><Reports/></ProtectedRoute>}>
+        <Route path="reports" element={<ProtectedRoute allowedRoles={['retailer','wholesaler',"reports"]}><Reports/></ProtectedRoute>}>
         <Route index={true} element={<AddBalance/>}/>
         <Route path="banktransfer" element={<BankTransfer/>}/>
         <Route path="payments" element={<Payments/>}/>
@@ -114,15 +115,18 @@ function App() {
         <Route path="comingsoon" element={<ComingSoon/>} />
         <Route path="TransactionHistory" element={<TransactionHistory/>} />
         </Route>
-
+        <Route path="reporter" element={<ProtectedRoute allowedRoles={['superadmin','reporter']}></ProtectedRoute>}>
+        <Route index={true} element={<GetReporter/>}/>
+        <Route path="addReporter" element={<AddReporter/>}/>
+        </Route>
        <Route path="WSdashboard" element={<ProtectedRoute allowedRoles={["wholesaler"]}><WSdashboard /></ProtectedRoute>} />
         <Route path="settings" element={<ProtectedRoute allowedRoles={["distributor", "superadmin","superdistributor"]}><Settings /></ProtectedRoute>} />
         <Route path="profile" element={<ProtectedRoute allowedRoles={["distributor", "superadmin","retailer","wholesaler","superdistributor"]}><Profile /></ProtectedRoute>} />
         <Route path="register" element={<ProtectedRoute allowedRoles={["distributor", "superadmin","superdistributor"]}><Register /></ProtectedRoute>} />
-        <Route path="addbalance" element={<ProtectedRoute allowedRoles={["retailer","wholesaler"]}><AddBalance/></ProtectedRoute>} />
-        <Route path="banktransfer" element={<ProtectedRoute allowedRoles={["retailer","wholesaler"]}><BankTransfer/></ProtectedRoute>} />
+        <Route path="addbalance" element={<ProtectedRoute allowedRoles={["retailer","wholesaler","reports"]}><AddBalance/></ProtectedRoute>} />
+        <Route path="banktransfer" element={<ProtectedRoute allowedRoles={["retailer","wholesaler","reports"]}><BankTransfer/></ProtectedRoute>} />
         <Route path="addnewbankaccount" element={<ProtectedRoute allowedRoles={["retailer","wholesaler"]}><AddNewBankAccount/></ProtectedRoute>} />
-        <Route path="payments" element={<ProtectedRoute allowedRoles={["retailer","wholesaler"]}><Payments/></ProtectedRoute>} />
+        <Route path="payments" element={<ProtectedRoute allowedRoles={["retailer","wholesaler","reports"]}><Payments/></ProtectedRoute>} />
         <Route path="addcreditcard" element={<ProtectedRoute allowedRoles={["retailer","wholesaler"]}><Payments/></ProtectedRoute>} />
         <Route path="comingsoon" element={<ProtectedRoute allowedRoles={["retailer","wholesaler"]}><Payments/></ProtectedRoute>} />
         <Route path="transactionhistory" element={<ProtectedRoute allowedRoles={["retailer","wholesaler"]}><Payments/></ProtectedRoute>} />

@@ -6,6 +6,7 @@ import { setLogin } from "../redux/authSlice";
 import { useLoginMutation,useResetPasswordMutation } from "../slices/usersApiSlice";
 import logo from "../assets/logo/TheQucikPayMe.png";
 import "@fortawesome/fontawesome-free/css/all.min.css";
+import { toast } from "react-toastify";
 
 function PasswordSetup() {
   const [userID, setUserID] = useState("");
