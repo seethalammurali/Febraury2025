@@ -1,7 +1,7 @@
 import { Table, Button, Modal } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { toast } from 'react-toastify';
-import { useActiveRetailerMutation, useGetRetailerMutation } from '../../slices/usersApiSlice';
+import { useActiveRetailerMutation, useGetRetailerMutation, useApiLockMutation } from '../../slices/usersApiSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import "../../styles/GetDistributor.css";
@@ -12,11 +12,12 @@ export default function GetRetailer() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const {userInfo} = useSelector((state)=>state.auth)
-  
+
   const [getRetailer,{isLoading}]=useGetRetailerMutation()
   const [activeRetailer]=useActiveRetailerMutation()
+  const [apilock] = useApiLockMutation()
     useEffect(()=>{
-    
+
         const fetchRetailer = async()=>{
              try {
               let param = userInfo.role !=="superadmin"?userInfo.id:''
@@ -30,32 +31,32 @@ export default function GetRetailer() {
                 mobile:item.user_mobile,
                 doj:item.doj,
                 kyc:item.kyc_status,
-                status:item.retailer_status===1 ? "Active" :'De-Active'    
+                status:item.retailer_status===1 ? "Active" :'De-Active'
                }))
                setData(formattedData)
              } catch (err) {
                toast.error(err?.data?.message||err.error);
              }
-           
+
            }
            fetchRetailer();
         },[])
     const onChange = (pagination, filters, sorter, extra) => {
         console.log('params', pagination, filters, sorter, extra);
-      
+
       };
       const handleView = (id) => {
         navigate(`/dashboard/retailer/getRetailer/${id}`);
       };
       const handleStatus=async(row)=>{
         console.log(row);
-        
+
               const updatedStatus = row.status === "Active" ? 0 : 1;
               const statusLabel = updatedStatus === 1 ? "Active" : "Dective";
               console.log('Step 1',updatedStatus);
               console.log('Step 2',statusLabel);
-              
-      
+
+
               Modal.confirm({
                 title: "Confirm Status Change",
                 content: `Are you sure you want to ${statusLabel} this distributor?`,
@@ -68,7 +69,7 @@ export default function GetRetailer() {
                       status: updatedStatus,
                     }).unwrap();
                     toast.success(res.message || "Status updated successfully");
-      
+
                     // update local state
                     // const newData = data.map((item) =>
                     //   item.ID === row.ID
@@ -88,7 +89,7 @@ export default function GetRetailer() {
                   console.log("User cancelled status change");
                 },
               });
-      
+
             }
       const columns = [
         {
@@ -110,13 +111,13 @@ export default function GetRetailer() {
           dataIndex: "retailerid",
           filters: data
             ? data.map((item) => ({
-              text: String(item.retailerid),  
+              text: String(item.retailerid),
               value: String(item.retailerid),
             }))
             : [],
           filterMode: "menu",
-          filterSearch: (input, record) => String(record.retailerid).includes(input), 
-          onFilter: (value, record) => String(record.retailerid).includes(value), 
+          filterSearch: (input, record) => String(record.retailerid).includes(input),
+          onFilter: (value, record) => String(record.retailerid).includes(value),
           width: "15%",
         },
         {
@@ -133,18 +134,18 @@ export default function GetRetailer() {
         },
         {
           title: "Mobile Number",
-          dataIndex: "mobile",  
+          dataIndex: "mobile",
           filters: data
             ? data
-                .filter((item) => item.mobile) 
+                .filter((item) => item.mobile)
                 .map((item) => ({
-                  text: item.mobile?.toString() || "",  
-                  value: item.mobile?.toString() || ""  
+                  text: item.mobile?.toString() || "",
+                  value: item.mobile?.toString() || ""
                 }))
             : [],
           filterMode: "menu",
-          filterSearch: (input, record) => record.value?.toString().includes(input),  
-          onFilter: (value, record) => record.mobile?.toString().includes(value),  
+          filterSearch: (input, record) => record.value?.toString().includes(input),
+          onFilter: (value, record) => record.mobile?.toString().includes(value),
         },
         {
           title: 'DOJ',
@@ -185,16 +186,33 @@ export default function GetRetailer() {
           dataIndex: 'view',
           width: 100,
           render: (_, record) => (
+            <>
+            <Button className="" onClick={() => handleApiLock(record)}>Lock</Button>
             <Button className="view-button" onClick={() => handleView(record.retailerid)}>View</Button>
+            </>
           ),
         },
-    
-   
+
+
   ];
+
+  const handleApiLock = async (row) => {
+    console.log(row);
+
+    try {
+      const res = await apilock({
+        userId:row.retailerid,
+        status:true
+      }).unwrap();
+      toast.success(res.message||"Api locked")
+    } catch (err) {
+      toast.error(err?.data?.message||err.error)
+    }
+  }
   return (
     <div>
       <div>{userInfo.role==="superadmin"?<></>:<button type="button" className="btn btn-warning"><Link to='addRetailer'>Add Retailer</Link></button>}
-        
+
       </div>
       <Table columns={columns} onChange={onChange} dataSource={data} />
 
